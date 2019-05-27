@@ -2,10 +2,57 @@
 <html lang="en" dir="ltr">
     <head>
         <meta charset="utf-8">
-        <title>Register-Me-Silly</title>
+        <title>Register Me Silly</title>
     </head>
     <body>
-        <marquee>Coming Soon!</marquee>
-        <!--  -->
+        <h1>Register Me Silly</h1>
+
+        <!-- Class Form -->
+        <h2>New Class Form</h2>
+        <form action="/" method="post">
+            {{ form.csrf_token }}
+            <table>
+                <tbody>
+                    {% for field in form %}
+                        {% if field.name != 'csrf_token' %}
+                            <tr>
+                                <td>{{ field.label }}</td>
+                                <td>{{ field }}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit">New Class</button>
+        </form>
+
+        <!-- Class List -->
+        <h2>Class List</h2>
+        <table>
+            <thead>
+                <thead>
+                    <tr>
+                        <th>Class ID</th>
+                        <th>Time ID</th>
+                        <th>Available</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for klass in classes %}
+                        <tr>
+                            <td>{{ klass.class_id }}</td>
+                            <td>{{ klass.time_id }}</td>
+                            <td>{{ klass.available }}</td>
+                            <td>
+                                <form action="/{{ klass.id }}/delete" method="post">
+                                    <button type="submit">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </thead>
+        </table>
     </body>
 </html>
