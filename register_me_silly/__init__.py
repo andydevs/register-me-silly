@@ -33,6 +33,7 @@ class ClassCheck(db.Model):
     time_id = db.Column(db.String())
     url = db.Column(db.String())
     available = db.Column(db.Boolean(), default=False)
+    last_checked = db.Column(db.Date())
 
 
 class NewClassCheckForm(FlaskForm):
@@ -56,7 +57,8 @@ def index():
             class_id=form.class_id.data,
             time_id=form.time_id.data,
             url=form.url.data,
-            available=False)
+            available=False,
+            last_checked=None)
         db.session.add(klass)
         db.session.commit()
     classes = ClassCheck.query.all()

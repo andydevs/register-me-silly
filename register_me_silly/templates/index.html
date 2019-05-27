@@ -35,6 +35,7 @@
                         <th>Class ID</th>
                         <th>Time ID</th>
                         <th>Available</th>
+                        <th>Last Checked</th>
                         <th>Delete</th>
                     </tr>
                 </thead>
@@ -44,6 +45,7 @@
                             <td>{{ klass.class_id }}</td>
                             <td>{{ klass.time_id }}</td>
                             <td>{{ klass.available }}</td>
+                            <td>{{ klass.last_checked }}</td>
                             <td>
                                 <form action="/{{ klass.id }}/delete" method="post">
                                     <button type="submit">Delete</button>
