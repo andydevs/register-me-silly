@@ -2,4 +2,4 @@ flask
 flask_sqlalchemy
 flask_wtf
 gunicorn
-pyscopg2
+psycopg2
