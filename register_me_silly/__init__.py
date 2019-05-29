@@ -13,6 +13,8 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import load_only
 from celery.result import ResultSet
 from .celery import make_celery
+from .enrollment import has_enrollment_available
+from .ifttt import trigger
 
 # Create and configure app
 app = Flask(__name__)
@@ -22,6 +24,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = environ['DATABASE_URL']
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['CELERY_BROKER_URL'] = environ['REDIS_URL']
 app.config['CELERY_RESULT_BACKEND'] = environ['REDIS_URL']
+app.config['IFTTT_KEY'] = environ['IFTTT_KEY']
 
 # Declare components
 db = SQLAlchemy(app)
@@ -72,10 +75,14 @@ def check_class(id):
     :param klass: class record
     """
     klass = ClassCheck.query.get(id)
+    available = has_enrollment_available(klass.url)
+    if available:
+        trigger('class_enroll_available',
+            value1=klass.class_id,
+            value2=klass.time_id)
     klass.last_checked = datetime.now()
-    klass.available = True
+    klass.available = available
     db.session.commit()
-    return (klass.id, klass.available)
 
 
 # Check all classes
