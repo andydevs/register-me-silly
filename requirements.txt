@@ -1,6 +1,6 @@
-flask
-flask_sqlalchemy
-flask_wtf
+Flask
+Flask-SQLAlchemy
+Flask-WTF
 psycopg2
 redis
 celery
