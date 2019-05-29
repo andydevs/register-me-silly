@@ -78,13 +78,13 @@ def check_class(id):
     """
     klass = ClassCheck.query.get(id)
     available = has_enrollment_available(klass.url)
+    klass.last_checked = datetime.now()
+    klass.available = available
+    db.session.commit()
     if available:
         trigger('class_enroll_available',
             value1=klass.class_id,
             value2=klass.time_id)
-    klass.last_checked = datetime.now()
-    klass.available = available
-    db.session.commit()
 
 
 # Check all classes
