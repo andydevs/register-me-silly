@@ -1,4 +1,5 @@
 set FLASK_APP=register_me_silly
 set SECRET_KEY=qPbCvCSWCFUh88IAdsQu8U9Vq7xVJcOLw9j1S3pryrifuRxoVABeWTYGKeST7dB4
 set WTF_CSRF_SECRET_KEY=FZNue6Dh9nLrwjy0Ww0NkuTBUEPwW4UkqOQsp0oll2tMEGnVcEH4XcKWFPgIofQk
-set DATABASE_URL=sqlite:///:memory:
+set DATABASE_URL=sqlite:///register_me_silly.db
+set REDIS_URL=redis://localhost:6379

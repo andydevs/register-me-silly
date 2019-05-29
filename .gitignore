@@ -1,3 +1,7 @@
+# Test database files
+register_me_silly.db
+dump.rdb
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

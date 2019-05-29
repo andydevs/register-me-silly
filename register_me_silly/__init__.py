@@ -7,11 +7,12 @@ Author:  Anshul Kharbanda
 Created: 5 - 26 - 2019
 """
 from os import environ
+from datetime import datetime
 from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
-from flask_wtf import FlaskForm
-from wtforms import StringField
-from wtforms.validators import DataRequired
+from sqlalchemy.orm import load_only
+from celery.result import ResultSet
+from .celery import make_celery
 
 # Create and configure app
 app = Flask(__name__)
@@ -19,31 +20,15 @@ app.config['SECRET_KEY'] = environ['SECRET_KEY']
 app.config['WTF_CSRF_SECRET_KEY'] = environ['WTF_CSRF_SECRET_KEY']
 app.config['SQLALCHEMY_DATABASE_URI'] = environ['DATABASE_URL']
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['CELERY_BROKER_URL'] = environ['REDIS_URL']
+app.config['CELERY_RESULT_BACKEND'] = environ['REDIS_URL']
 
-# Declare SQLALchemy
+# Declare components
 db = SQLAlchemy(app)
+celery = make_celery(app)
 
-
-class ClassCheck(db.Model):
-    """
-    Class Check Model
-    """
-    id = db.Column(db.Integer(), primary_key=True)
-    class_id = db.Column(db.String())
-    time_id = db.Column(db.String())
-    url = db.Column(db.String())
-    available = db.Column(db.Boolean(), default=False)
-    last_checked = db.Column(db.Date())
-
-
-class NewClassCheckForm(FlaskForm):
-    """
-    New Class Check Form
-    """
-    class_id = StringField('Class ID', validators=[DataRequired()])
-    time_id = StringField('Time ID', validators=[DataRequired()])
-    url = StringField('Check URL', validators=[DataRequired()])
-
+# Import model
+from .model import ClassCheck, NewClassCheckForm
 
 # ClassCheck list view
 @app.route('/', methods=['GET', 'POST'])
@@ -66,21 +51,42 @@ def index():
 
 
 # ClassCheck delete
-@app.route('/<class_id>/delete', methods=['POST'])
-def delete_class(class_id):
+@app.route('/<id>/delete', methods=['POST'])
+def delete_class(id):
     """
     Delete class view
     """
     if request.method == 'POST':
-        klass = ClassCheck.query.filter_by(id=class_id).first_or_404()
+        klass = ClassCheck.query.filter_by(id=id).first_or_404()
         db.session.delete(klass)
         db.session.commit()
         return redirect('/')
 
 
-# Check classes async task
-    # Notify when done
-    # Trigger every 15 minutes
+# Check class async task
+@celery.task()
+def check_class(id):
+    """
+    Check class, update class record
+
+    :param klass: class record
+    """
+    klass = ClassCheck.query.get(id)
+    klass.last_checked = datetime.now()
+    klass.available = True
+    db.session.commit()
+    return (klass.id, klass.available)
+
+
+# Check all classes
+@app.cli.command()
+def queue_check_classes():
+    """
+    Check class record with the given id
+    """
+    classes = ClassCheck.query.options(load_only('id')).all()
+    for klass in classes:
+        check_class.delay(klass.id)
 
 
 # Create database model
