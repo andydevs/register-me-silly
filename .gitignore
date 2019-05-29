@@ -2,6 +2,9 @@
 register_me_silly.db
 dump.rdb
 
+# Test migration folder
+migrations/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

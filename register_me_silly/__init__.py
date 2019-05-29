@@ -10,6 +10,7 @@ from os import environ
 from datetime import datetime
 from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from sqlalchemy.orm import load_only
 from celery.result import ResultSet
 from .celery import make_celery
@@ -28,6 +29,7 @@ app.config['IFTTT_KEY'] = environ['IFTTT_KEY']
 
 # Declare components
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 celery = make_celery(app)
 
 # Import model
@@ -94,8 +96,3 @@ def queue_check_classes():
     classes = ClassCheck.query.options(load_only('id')).all()
     for klass in classes:
         check_class.delay(klass.id)
-
-
-# Create database model
-db.create_all()
-db.session.commit()
