@@ -26,13 +26,21 @@
 
         <!-- Class Form -->
         <h2>New Class Form</h2>
+        <p>URL needs to be full direct url from webpage. No redirects (e.g. bit.ly urls).</p>
         <form action="/" method="post">
             {{ pretty_form(new_class_check_form, submit='Add Class') }}
         </form>
 
         <!-- CSV Upload Form -->
         <h2>Upload CSV Form</h2>
-        <form action="/" method="post">
+        <p>CSV file should have no header and have following format:</p>
+        <ul>
+            <li>First Column: <b>Class ID</b></li>
+            <li>Second Column: <b>Time ID</b></li>
+            <li>Third Column: <b>URL</b></li>
+        </ul>
+        <p>URL needs to be full direct url from webpage. No redirects, e.g. bit.ly urls.</p>
+        <form action="/upload-csv" method="post" enctype="multipart/form-data">
             {{ pretty_form(upload_csv_form, submit='Upload') }}
         </form>
 

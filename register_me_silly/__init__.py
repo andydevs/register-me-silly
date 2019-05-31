@@ -61,6 +61,18 @@ def index():
         classes=classes)
 
 
+@app.route('/upload-csv', methods=['POST'])
+def upload_csv():
+    """
+    Upload csv file
+    """
+    upload_csv_form = UploadCSVForm()
+    if upload_csv_form.validate_on_submit():
+        file = upload_csv_form.csv.data
+        ClassCheck.process_csv_file(file)
+    return redirect('/')
+
+
 @app.route('/<id>/delete', methods=['POST'])
 def delete_class(id):
     """
@@ -70,7 +82,7 @@ def delete_class(id):
         klass = ClassCheck.query.filter_by(id=id).first_or_404()
         db.session.delete(klass)
         db.session.commit()
-        return redirect('/')
+    return redirect('/')
 
 
 @celery.task()
