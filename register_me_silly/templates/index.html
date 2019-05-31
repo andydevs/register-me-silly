@@ -11,99 +11,110 @@
 {% block content %}
 <div class='container'>
     <!-- Title -->
-    <h1 class="my-5">Register Me Silly</h1>
+    <h1 class="my-4">Register Me Silly</h1>
+
+    <!-- Horizontal rule -->
+    <hr>
 
     <!-- Flashed Messages -->
     {% with messages = get_flashed_messages(with_categories=True) %}
         {% if messages %}
-            <ul>
+            <div class="my-4">
                 {% for category, message in messages %}
-                    <li>{{ category }} - {{ message }}</li>
+                    <p class="alert-{{ category }}">{{ message }}</p>
                 {% endfor %}
-            </ul>
+            </div class="my-4">
         {% endif %}
     {% endwith %}
 
-    <!-- Input forms -->
-    <div class="my-3">
-        <ul class="nav nav-pills mb-3" id="form-tabs" role="tablist">
-            <li class="nav-item">
-                <a class="nav-link active"
-                   id="new-class-form-tab"
-                   data-toggle="pill"
-                   href="#new-class-form"
-                   role="tab">
-                   New Class
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link"
-                   id="upload-csv-form-tab"
-                   data-toggle="pill"
-                   href="#upload-csv-form"
-                   role="tab">
-                   Upload CSV
-                </a>
-            </li>
-        </ul>
-        <div class="tab-content" id="form-tabs-content">
-            <!-- New Class Form -->
-            <div class="tab-pane fade show active" id="new-class-form" role="tabpanel">
-                <h2>New Class Form</h2>
-                <p>URL needs to be full direct url from webpage. No redirects (e.g. bit.ly urls).</p>
-                <form class='form' action="/new-class-check" method="post">
-                    {{ wtf.quick_form(new_class_check_form) }}
-                    <button type="submit" class="btn btn-primary">Add Class</button>
-                </form>
-            </div>
+    <div class="row my-4">
+        <div class="col-lg-6 my-4">
+            <ul class="nav nav-pills mb-3" id="form-tabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active"
+                       id="new-class-form-tab"
+                       data-toggle="pill"
+                       href="#new-class-form"
+                       role="tab">
+                       New Class
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"
+                       id="upload-csv-form-tab"
+                       data-toggle="pill"
+                       href="#upload-csv-form"
+                       role="tab">
+                       Upload CSV
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content" id="form-tabs-content">
+                <!-- New Class Form -->
+                <div class="tab-pane fade show active" id="new-class-form" role="tabpanel">
+                    <h2>New Class Form</h2>
+                    <p>URL needs to be full direct url from webpage. No redirects (e.g. bit.ly urls).</p>
+                    <form class='form' action="/new-class-check" method="post">
+                        {{ wtf.quick_form(new_class_check_form) }}
+                        <button type="submit" class="btn btn-primary">Add Class</button>
+                    </form>
+                </div>
 
-            <!-- CSV Upload Form -->
-            <div class="tab-pane fade" id="upload-csv-form" role="tabpanel">
-                <h2>Upload CSV Form</h2>
-                <p>CSV file should have no header and have following format:</p>
-                <ul>
-                    <li>First Column: <b>Class ID</b></li>
-                    <li>Second Column: <b>Time ID</b></li>
-                    <li>Third Column: <b>URL</b></li>
-                </ul>
-                <p>URL needs to be full direct url from webpage. No redirects (e.g. bit.ly urls).</p>
-                <form class='form' action="/upload-csv" method="post" enctype="multipart/form-data">
-                    {{ wtf.quick_form(upload_csv_form) }}
-                    <button type="submit" class="btn btn-primary">Upload CSV</button>
-                </form>
+                <!-- CSV Upload Form -->
+                <div class="tab-pane fade" id="upload-csv-form" role="tabpanel">
+                    <h2>Upload CSV Form</h2>
+                    <p>CSV file should have no header and have following format:</p>
+                    <ul>
+                        <li>First Column: <b>Class ID</b></li>
+                        <li>Second Column: <b>Time ID</b></li>
+                        <li>Third Column: <b>URL</b></li>
+                    </ul>
+                    <p>URL needs to be full direct url from webpage. No redirects (e.g. bit.ly urls).</p>
+                    <form class='form' action="/upload-csv" method="post" enctype="multipart/form-data">
+                        {{ wtf.quick_form(upload_csv_form) }}
+                        <button type="submit" class="btn btn-primary">Upload CSV</button>
+                    </form>
+                </div>
             </div>
+        </div>
+
+        <!-- Class List -->
+        <div class="col-lg-6 my-4">
+            <h2>Class List</h2>
+            <table class="table">
+                <thead>
+                    <thead>
+                        <tr>
+                            <th>Class ID</th>
+                            <th>Time ID</th>
+                            <th>Available</th>
+                            <th>Last Checked</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for klass in classes %}
+                            <tr>
+                                <td>{{ klass.class_id }}</td>
+                                <td>{{ klass.time_id }}</td>
+                                <td>{{ klass.available }}</td>
+                                <td>{{ klass.last_checked }}</td>
+                                <td>
+                                    <form action="/{{ klass.id }}/delete" method="post">
+                                        <button class="btn btn-sm btn-danger" type="submit">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </thead>
+            </table>
         </div>
     </div>
 
-    <!-- Class List -->
-    <h2>Class List</h2>
-    <table class="table">
-        <thead>
-            <thead>
-                <tr>
-                    <th>Class ID</th>
-                    <th>Time ID</th>
-                    <th>Available</th>
-                    <th>Last Checked</th>
-                    <th>Delete</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for klass in classes %}
-                    <tr>
-                        <td>{{ klass.class_id }}</td>
-                        <td>{{ klass.time_id }}</td>
-                        <td>{{ klass.available }}</td>
-                        <td>{{ klass.last_checked }}</td>
-                        <td>
-                            <form action="/{{ klass.id }}/delete" method="post">
-                                <button class="btn btn-sm btn-danger" type="submit">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </thead>
-    </table>
+    <!-- Input forms -->
+    <div class="my-3">
+
+    </div>
 </div>
 {% endblock %}
