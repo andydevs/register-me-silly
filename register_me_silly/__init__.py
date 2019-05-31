@@ -8,7 +8,7 @@ Created: 5 - 26 - 2019
 """
 from os import environ
 from datetime import datetime
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from sqlalchemy.orm import load_only
@@ -67,6 +67,7 @@ def new_class_check():
             last_checked=None)
         db.session.add(klass)
         db.session.commit()
+        flash('New class check added!', 'success')
     return redirect('/')
 
 
@@ -79,6 +80,7 @@ def upload_csv():
     if upload_csv_form.validate_on_submit():
         file = upload_csv_form.csv.data
         ClassCheck.process_csv_file(file)
+        flash('CSV file uploaded!', 'success')
     return redirect('/')
 
 
@@ -91,6 +93,7 @@ def delete_class(id):
         klass = ClassCheck.query.filter_by(id=id).first_or_404()
         db.session.delete(klass)
         db.session.commit()
+        flash('Class check deleted!', 'success')
     return redirect('/')
 
 

@@ -26,6 +26,17 @@
         <!-- Title -->
         <h1>Register Me Silly</h1>
 
+        <!-- Flashed Messages -->
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+                <ul>
+                    {% for category, message in messages %}
+                        <li>{{ category }} - {{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
         <!-- Class Form -->
         <h2>New Class Form</h2>
         <p>URL needs to be full direct url from webpage. No redirects (e.g. bit.ly urls).</p>
@@ -41,7 +52,7 @@
             <li>Second Column: <b>Time ID</b></li>
             <li>Third Column: <b>URL</b></li>
         </ul>
-        <p>URL needs to be full direct url from webpage. No redirects, e.g. bit.ly urls.</p>
+        <p>URL needs to be full direct url from webpage. No redirects (e.g. bit.ly urls).</p>
         <form action="/upload-csv" method="post" enctype="multipart/form-data">
             {{ pretty_form(upload_csv_form, submit='Upload') }}
         </form>
