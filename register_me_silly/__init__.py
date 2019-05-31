@@ -35,7 +35,7 @@ celery = make_celery(app)
 # Import model
 from .model import ClassCheck, NewClassCheckForm
 
-# ClassCheck list view
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     """
@@ -55,7 +55,6 @@ def index():
     return render_template('index.html', form=form, classes=classes)
 
 
-# ClassCheck delete
 @app.route('/<id>/delete', methods=['POST'])
 def delete_class(id):
     """
@@ -68,10 +67,11 @@ def delete_class(id):
         return redirect('/')
 
 
-# Check class async task
 @celery.task()
 def check_class(id):
     """
+    Celery task
+
     Check class, update class record
 
     :param klass: class record
@@ -87,7 +87,6 @@ def check_class(id):
             value2=klass.time_id)
 
 
-# Check all classes
 @app.cli.command()
 def queue_check_classes():
     """
