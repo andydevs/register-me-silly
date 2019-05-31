@@ -1,91 +1,80 @@
-{% macro pretty_form(form, submit='Submit') %}
-    {{ form.csrf_token }}
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Register Me Silly{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+{% endblock %}
+
+{% block content %}
+<div class='container'>
+    <!-- Title -->
+    <h1>Register Me Silly</h1>
+
+    <!-- Flashed Messages -->
+    {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            <ul>
+                {% for category, message in messages %}
+                    <li>{{ category }} - {{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Class Form -->
+    <h2>New Class Form</h2>
+    <p>URL needs to be full direct url from webpage. No redirects (e.g. bit.ly urls).</p>
+    <form class='form' action="/new-class-check" method="post">
+        {{ wtf.quick_form(new_class_check_form) }}
+        <button type="submit" class="btn btn-primary">Add Class</button>
+    </form>
+
+    <!-- CSV Upload Form -->
+    <h2>Upload CSV Form</h2>
+    <p>CSV file should have no header and have following format:</p>
+    <ul>
+        <li>First Column: <b>Class ID</b></li>
+        <li>Second Column: <b>Time ID</b></li>
+        <li>Third Column: <b>URL</b></li>
+    </ul>
+    <p>URL needs to be full direct url from webpage. No redirects (e.g. bit.ly urls).</p>
+    <form class='form' action="/upload-csv" method="post" enctype="multipart/form-data">
+        {{ wtf.quick_form(upload_csv_form) }}
+        <button type="submit" class="btn btn-primary">Upload CSV</button>
+    </form>
+
+    <!-- Class List -->
+    <h2>Class List</h2>
     <table>
-        <tbody>
-            {% for field in form %}
-                {% if field.name != 'csrf_token' %}
-                    <tr>
-                        <td>{{ field.label }}</td>
-                        <td>{{ field }}</td>
-                    </tr>
-                {% endif %}
-            {% endfor %}
-        </tbody>
-    </table>
-    <button type="submit">{{ submit }}</button>
-{% endmacro %}
-
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-    <head>
-        <meta charset="utf-8">
-        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-        <title>Register Me Silly</title>
-    </head>
-    <body>
-        <!-- Title -->
-        <h1>Register Me Silly</h1>
-
-        <!-- Flashed Messages -->
-        {% with messages = get_flashed_messages(with_categories=True) %}
-            {% if messages %}
-                <ul>
-                    {% for category, message in messages %}
-                        <li>{{ category }} - {{ message }}</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        {% endwith %}
-
-        <!-- Class Form -->
-        <h2>New Class Form</h2>
-        <p>URL needs to be full direct url from webpage. No redirects (e.g. bit.ly urls).</p>
-        <form action="/new-class-check" method="post">
-            {{ pretty_form(new_class_check_form, submit='Add Class') }}
-        </form>
-
-        <!-- CSV Upload Form -->
-        <h2>Upload CSV Form</h2>
-        <p>CSV file should have no header and have following format:</p>
-        <ul>
-            <li>First Column: <b>Class ID</b></li>
-            <li>Second Column: <b>Time ID</b></li>
-            <li>Third Column: <b>URL</b></li>
-        </ul>
-        <p>URL needs to be full direct url from webpage. No redirects (e.g. bit.ly urls).</p>
-        <form action="/upload-csv" method="post" enctype="multipart/form-data">
-            {{ pretty_form(upload_csv_form, submit='Upload') }}
-        </form>
-
-        <!-- Class List -->
-        <h2>Class List</h2>
-        <table>
+        <thead>
             <thead>
-                <thead>
-                    <tr>
-                        <th>Class ID</th>
-                        <th>Time ID</th>
-                        <th>Available</th>
-                        <th>Last Checked</th>
-                        <th>Delete</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for klass in classes %}
-                        <tr>
-                            <td>{{ klass.class_id }}</td>
-                            <td>{{ klass.time_id }}</td>
-                            <td>{{ klass.available }}</td>
-                            <td>{{ klass.last_checked }}</td>
-                            <td>
-                                <form action="/{{ klass.id }}/delete" method="post">
-                                    <button type="submit">Delete</button>
-                                </form>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
+                <tr>
+                    <th>Class ID</th>
+                    <th>Time ID</th>
+                    <th>Available</th>
+                    <th>Last Checked</th>
+                    <th>Delete</th>
+                </tr>
             </thead>
-        </table>
-    </body>
-</html>
+            <tbody>
+                {% for klass in classes %}
+                    <tr>
+                        <td>{{ klass.class_id }}</td>
+                        <td>{{ klass.time_id }}</td>
+                        <td>{{ klass.available }}</td>
+                        <td>{{ klass.last_checked }}</td>
+                        <td>
+                            <form action="/{{ klass.id }}/delete" method="post">
+                                <button class="btn btn-sm btn-danger" type="submit">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </thead>
+    </table>
+</div>
+{% endblock %}

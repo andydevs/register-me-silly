@@ -11,6 +11,7 @@ from datetime import datetime
 from flask import Flask, render_template, request, redirect, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_bootstrap import Bootstrap
 from sqlalchemy.orm import load_only
 from celery.result import ResultSet
 from .celery import make_celery
@@ -32,6 +33,7 @@ app.config['IFTTT_KEY'] = environ['IFTTT_KEY']
 # Declare components
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
+bootstrap = Bootstrap(app)
 celery = make_celery(app)
 
 # Import model

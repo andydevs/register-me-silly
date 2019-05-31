@@ -2,6 +2,7 @@ Flask
 Flask-WTF
 Flask-SQLAlchemy
 Flask-Migrate
+Flask-Bootstrap4
 alembic
 psycopg2
 redis
