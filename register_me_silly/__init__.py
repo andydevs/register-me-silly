@@ -43,18 +43,20 @@ def index():
     """
     Class check list view
     """
-    form = NewClassCheckForm()
-    if form.validate_on_submit():
+    new_class_check_form = NewClassCheckForm()
+    if new_class_check_form.validate_on_submit():
         klass = ClassCheck(
-            class_id=form.class_id.data,
-            time_id=form.time_id.data,
-            url=form.url.data,
+            class_id=new_class_check_form.class_id.data,
+            time_id=new_class_check_form.time_id.data,
+            url=new_class_check_form.url.data,
             available=False,
             last_checked=None)
         db.session.add(klass)
         db.session.commit()
     classes = ClassCheck.query.all()
-    return render_template('index.html', form=form, classes=classes)
+    return render_template('index.html',
+        new_class_check_form=new_class_check_form,
+        classes=classes)
 
 
 @app.route('/<id>/delete', methods=['POST'])
