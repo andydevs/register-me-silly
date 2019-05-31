@@ -30,6 +30,12 @@
             {{ pretty_form(new_class_check_form, submit='Add Class') }}
         </form>
 
+        <!-- CSV Upload Form -->
+        <h2>Upload CSV Form</h2>
+        <form action="/" method="post">
+            {{ pretty_form(upload_csv_form, submit='Upload') }}
+        </form>
+
         <!-- Class List -->
         <h2>Class List</h2>
         <table>

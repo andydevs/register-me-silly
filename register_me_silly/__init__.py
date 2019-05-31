@@ -16,7 +16,7 @@ from celery.result import ResultSet
 from .celery import make_celery
 from .enrollment import has_enrollment_available
 from .ifttt import trigger
-from .forms import NewClassCheckForm
+from .forms import NewClassCheckForm, UploadCSVForm
 
 
 # Create and configure app
@@ -44,6 +44,7 @@ def index():
     Class check list view
     """
     new_class_check_form = NewClassCheckForm()
+    upload_csv_form = UploadCSVForm()
     if new_class_check_form.validate_on_submit():
         klass = ClassCheck(
             class_id=new_class_check_form.class_id.data,
@@ -56,6 +57,7 @@ def index():
     classes = ClassCheck.query.all()
     return render_template('index.html',
         new_class_check_form=new_class_check_form,
+        upload_csv_form=upload_csv_form,
         classes=classes)
 
 
