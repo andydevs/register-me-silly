@@ -38,13 +38,26 @@ celery = make_celery(app)
 from .model import ClassCheck
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET'])
 def index():
     """
     Class check list view
     """
     new_class_check_form = NewClassCheckForm()
     upload_csv_form = UploadCSVForm()
+    classes = ClassCheck.query.all()
+    return render_template('index.html',
+        new_class_check_form=new_class_check_form,
+        upload_csv_form=upload_csv_form,
+        classes=classes)
+
+
+@app.route('/new-class-check', methods=['POST'])
+def new_class_check():
+    """
+    New Class Check record
+    """
+    new_class_check_form = NewClassCheckForm()
     if new_class_check_form.validate_on_submit():
         klass = ClassCheck(
             class_id=new_class_check_form.class_id.data,
@@ -54,11 +67,7 @@ def index():
             last_checked=None)
         db.session.add(klass)
         db.session.commit()
-    classes = ClassCheck.query.all()
-    return render_template('index.html',
-        new_class_check_form=new_class_check_form,
-        upload_csv_form=upload_csv_form,
-        classes=classes)
+    return redirect('/')
 
 
 @app.route('/upload-csv', methods=['POST'])

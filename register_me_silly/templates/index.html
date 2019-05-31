@@ -23,12 +23,13 @@
         <title>Register Me Silly</title>
     </head>
     <body>
+        <!-- Title -->
         <h1>Register Me Silly</h1>
 
         <!-- Class Form -->
         <h2>New Class Form</h2>
         <p>URL needs to be full direct url from webpage. No redirects (e.g. bit.ly urls).</p>
-        <form action="/" method="post">
+        <form action="/new-class-check" method="post">
             {{ pretty_form(new_class_check_form, submit='Add Class') }}
         </form>
 
