@@ -16,6 +16,8 @@ from celery.result import ResultSet
 from .celery import make_celery
 from .enrollment import has_enrollment_available
 from .ifttt import trigger
+from .forms import NewClassCheckForm
+
 
 # Create and configure app
 app = Flask(__name__)
@@ -33,7 +35,7 @@ migrate = Migrate(app, db)
 celery = make_celery(app)
 
 # Import model
-from .model import ClassCheck, NewClassCheckForm
+from .model import ClassCheck
 
 
 @app.route('/', methods=['GET', 'POST'])
