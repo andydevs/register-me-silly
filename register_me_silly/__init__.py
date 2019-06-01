@@ -30,11 +30,13 @@ app.config['CELERY_BROKER_URL'] = environ['REDIS_URL']
 app.config['CELERY_RESULT_BACKEND'] = environ['REDIS_URL']
 app.config['IFTTT_KEY'] = environ['IFTTT_KEY']
 
+
 # Declare components
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 bootstrap = Bootstrap(app)
 celery = make_celery(app)
+
 
 # Import model
 from .model import ClassCheck
