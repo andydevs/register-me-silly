@@ -1,0 +1,41 @@
+{
+    "name": "Register Me Silly",
+    "description": "Notifies me when classes are available",
+    "keywords": [
+        "class",
+        "register",
+        "silly",
+        "why"
+    ],
+    "repository": "https://www.github.com/andydevs/register-me-silly",
+    "success_url": "/",
+    "scripts": {
+        "postdeploy": "flask db upgrade"
+    },
+    "env": {
+        "FLASK_APP": "register_me_silly",
+        "FLASK_ENV": "production",
+        "SECRET_KEY": {
+            "description": "Secret key used for secret stuff",
+            "generator": "secret"
+        },
+        "WTF_CSRF_SECRET_KEY": {
+            "description": "CSRF secret key to sign forms",
+            "generator": "secret"
+        },
+        "IFTTT_KEY": {
+            "description": "IFTTT key for sending notifications. Find this by going onto https://maker.ifttt.com/ (you'll need an IFTTT account, of course) and clicking on Documentation.",
+            "required": true
+        }
+    },
+    "image": "heroku/python",
+    "formation": {
+        "web": { "quantity": 1, "size": "free" },
+        "worker": { "quantity": 1, "size": "hobby" }
+    },
+    "addons": [
+        "heroku-postgresql:hobby-dev",
+        "heroku-redis:hobby-dev",
+        "scheduler:standard"
+    ]
+}
