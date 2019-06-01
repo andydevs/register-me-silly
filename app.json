@@ -19,11 +19,13 @@
         },
         "FLASK_APP": {
             "description": "(DO NOT CHANGE!) Name of flask app. Used to coordinate commands",
-            "value": "register_me_silly"
+            "value": "register_me_silly",
+            "required": true
         },
         "FLASK_ENV": {
-            "description" : "(DO NOT CHANGE!) Flask runtime environment",
-            "value": "production"
+            "description": "(DO NOT CHANGE!) Flask runtime environment",
+            "value": "production",
+            "required": true
         },
         "SECRET_KEY": {
             "description": "Secret key used for secret stuff",
