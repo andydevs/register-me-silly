@@ -31,7 +31,7 @@
     "image": "heroku/python",
     "formation": {
         "web": { "quantity": 1, "size": "free" },
-        "worker": { "quantity": 1, "size": "hobby" }
+        "worker": { "quantity": 1, "size": "free" }
     },
     "addons": [
         "heroku-postgresql:hobby-dev",
