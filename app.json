@@ -15,17 +15,17 @@
     "env": {
         "IFTTT_KEY": {
             "description": "IFTTT key for sending notifications. Find this by going onto https://maker.ifttt.com/ (you'll need an IFTTT account, of course) and clicking on Documentation.",
-            "required": true
+            "required": "true"
         },
         "FLASK_APP": {
             "description": "(DO NOT CHANGE!) Name of flask app. Used to coordinate commands",
             "value": "register_me_silly",
-            "required": true
+            "required": "true"
         },
         "FLASK_ENV": {
             "description": "(DO NOT CHANGE!) Flask runtime environment",
             "value": "production",
-            "required": true
+            "required": "true"
         },
         "SECRET_KEY": {
             "description": "Secret key used for secret stuff",
