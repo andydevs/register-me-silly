@@ -15,13 +15,7 @@ from .celery import make_celery
 
 # Create and configure app
 app = Flask(__name__)
-app.config['SECRET_KEY'] = environ['SECRET_KEY']
-app.config['WTF_CSRF_SECRET_KEY'] = environ['WTF_CSRF_SECRET_KEY']
-app.config['SQLALCHEMY_DATABASE_URI'] = environ['DATABASE_URL']
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['CELERY_BROKER_URL'] = environ['REDIS_URL']
-app.config['CELERY_RESULT_BACKEND'] = environ['REDIS_URL']
-app.config['IFTTT_KEY'] = environ['IFTTT_KEY']
+app.config.from_object('config.AppConfig')
 
 # Declare components
 db = SQLAlchemy(app)

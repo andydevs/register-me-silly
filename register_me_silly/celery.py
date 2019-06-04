@@ -18,7 +18,7 @@ def make_celery(app):
     celery = Celery(app.import_name,
         backend=app.config['CELERY_RESULT_BACKEND'],
         broker=app.config['CELERY_BROKER_URL'])
-        
+
     # Celery task using app context
     class ContextTask(celery.Task):
         def __call__(self, *args, **kwargs):
