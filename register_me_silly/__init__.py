@@ -12,8 +12,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_bootstrap import Bootstrap
 from .celery import make_celery
-from .enrollment import has_enrollment_available
-from .ifttt import trigger
 
 # Create and configure app
 app = Flask(__name__)
