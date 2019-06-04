@@ -6,6 +6,7 @@ Notifies me when classes are available
 Author:  Anshul Kharbanda
 Created: 5 - 26 - 2019
 """
+from random import randint
 from datetime import datetime
 from . import celery, db
 from .model import ClassCheck
@@ -31,3 +32,14 @@ def check_class(id):
         trigger('class_enroll_available',
             value1=klass.class_id,
             value2=klass.time_id)
+
+
+@celery.task()
+def test_tasks():
+    """
+    Celery task
+
+    Test tasks system
+    """
+    print('Testing it out!')
+    return randint(0, 0xffffffff)
