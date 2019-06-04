@@ -15,9 +15,8 @@ def make_celery(app):
     :param app: flask application instance
     """
     # Create and configure celery
-    celery = Celery(app.import_name,
-        backend=app.config['CELERY_RESULT_BACKEND'],
-        broker=app.config['CELERY_BROKER_URL'])
+    celery = Celery(app.import_name)
+    celery.config_from_object('config.CeleryConfig')
 
     # Celery task using app context
     class ContextTask(celery.Task):
