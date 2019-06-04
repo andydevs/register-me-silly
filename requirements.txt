@@ -10,3 +10,4 @@ celery
 gunicorn
 requests
 beautifulsoup4
+python-dotenv
