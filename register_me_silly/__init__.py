@@ -7,17 +7,13 @@ Author:  Anshul Kharbanda
 Created: 5 - 26 - 2019
 """
 from os import environ
-from datetime import datetime
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_bootstrap import Bootstrap
-from sqlalchemy.orm import load_only
-from celery.result import ResultSet
 from .celery import make_celery
 from .enrollment import has_enrollment_available
 from .ifttt import trigger
-
 
 # Create and configure app
 app = Flask(__name__)
@@ -29,25 +25,13 @@ app.config['CELERY_BROKER_URL'] = environ['REDIS_URL']
 app.config['CELERY_RESULT_BACKEND'] = environ['REDIS_URL']
 app.config['IFTTT_KEY'] = environ['IFTTT_KEY']
 
-
 # Declare components
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 bootstrap = Bootstrap(app)
 celery = make_celery(app)
 
-
-# Import model
+# Import parts
 from . import views
-from .tasks import check_class
-from .model import ClassCheck
-
-
-@app.cli.command()
-def queue_check_classes():
-    """
-    Check class record with the given id
-    """
-    classes = ClassCheck.query.options(load_only('id')).all()
-    for klass in classes:
-        check_class.delay(klass.id)
+from . import tasks
+from . import cli
