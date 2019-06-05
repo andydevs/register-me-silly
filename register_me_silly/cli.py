@@ -8,7 +8,7 @@ Created: 5 - 26 - 2019
 """
 from sqlalchemy.orm import load_only
 from . import app
-from .tasks import check_class, test_tasks
+from .tasks import check_classes, test_tasks
 from .model import ClassCheck
 
 
@@ -17,9 +17,7 @@ def queue_check_classes():
     """
     Check class record with the given id
     """
-    classes = ClassCheck.query.options(load_only('id')).all()
-    for klass in classes:
-        check_class.delay(klass.id)
+    check_classes.delay()
 
 
 @app.cli.command()

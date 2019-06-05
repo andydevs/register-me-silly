@@ -19,8 +19,16 @@ def make_celery(app):
     celery.config_from_object('config.CeleryConfig')
 
     # Celery task using app context
-    class ContextTask(celery.Task):
+    BaseTask = celery.Task
+    class ContextTask(BaseTask):
+        """
+        Task being run within app context
+        """
         def __call__(self, *args, **kwargs):
+            """
+            Run task within flask app context
+            """
+            print(f'[CONTEXTTASK] app: {app.import_name}')
             with app.app_context():
                 return self.run(*args, **kwargs)
 
