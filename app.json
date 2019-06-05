@@ -33,7 +33,6 @@
     },
     "addons": [
         "heroku-postgresql:hobby-dev",
-        "heroku-redis:hobby-dev",
-        "scheduler:standard"
+        "heroku-redis:hobby-dev"
     ]
 }
