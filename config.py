@@ -7,7 +7,7 @@ Author:  Anshul Kharbanda
 Created: 5 - 26 - 2019
 """
 from os import environ
-
+from celery.schedules import crontab
 
 class AppConfig:
     """
@@ -27,4 +27,9 @@ class CeleryConfig:
     BROKER_URL = environ['REDIS_URL']
     CELERY_RESULT_BACKEND = environ['REDIS_URL']
     CELERY_TASK_SERIALIZER = 'json'
-    CELERYBEAT_SCHEDULE = {}
+    CELERYBEAT_SCHEDULE = {
+        'schedule-check-classes' : {
+            'task': 'tasks.check_classes',
+            'schedule': crontab(minute='*/15')
+        }
+    }
