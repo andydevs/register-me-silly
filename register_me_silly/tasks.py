@@ -15,7 +15,7 @@ from .enrollment import has_enrollment_available
 from .ifttt import trigger
 
 
-@celery.task()
+@celery.task(ignore_result=True)
 def check_classes():
     """
     Celery task
@@ -27,7 +27,7 @@ def check_classes():
         check_class.delay(klass.id)
 
 
-@celery.task()
+@celery.task(ignore_result=True)
 def check_class(id):
     """
     Celery task
